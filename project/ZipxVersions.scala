@@ -32,10 +32,10 @@ object MyVersions extends ZipxVersions:
   val specularPlugin = Plugin("rocks.earlyeffect", "sbt-specular", "0.17.0")
   val sbtReload      = Plugin("com.jamesward", "sbt-reload", "0.0.7")
 
-  def coreLib  = library(zio, zioStreams, zioJson, heddle)
-  def coreTest = library(zioTest, zioTestSbt)
-  def docsTest = library(specularZioTest, specularTheme, ascentCss)
-  def javaTime = library(scalaJavaTime, scalaJavaTimeTzdb)
+  def coreLib   = library(zio, zioStreams, zioJson, heddle)
+  def coreTest  = library(zioTest, zioTestSbt)
+  def docsTest  = library(specularZioTest, specularTheme, ascentCss)
+  def javaTime  = library(scalaJavaTime, scalaJavaTimeTzdb)
   def jsRuntime = javaTime
 
   def nativeTestInterface: Seq[Setting[?]] =

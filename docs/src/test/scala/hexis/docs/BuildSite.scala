@@ -8,7 +8,8 @@ import java.nio.file.Path
 
 object BuildSite extends DocsSite:
 
-  def pages = Vector(Overview.doc, Quickstart.doc, Transport.doc, Patterns.doc, Errors.doc, Cookbooks.doc)
+  def pages =
+    Vector(Overview.doc, Install.doc, Quickstart.doc, Transport.doc, Patterns.doc, Errors.doc, Cookbooks.doc)
 
   override def site: SiteModel =
     val m       = meta
@@ -25,6 +26,7 @@ answers, probabilities you can branch on. HTTP is heddle on JVM, JS, and Native.
           links = Vector(EarlyEffectTheme.github("https://github.com/early-effect/hexis")),
         )
       ),
+      installSnippets = Vector(CodeSnippet("Install", Install.coordinate)),
     )
   end site
 
