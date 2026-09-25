@@ -7,17 +7,7 @@ Compose those answers in your code.
 
 Cross-built for JVM, Scala.js, and Scala Native. HTTP is [heddle](https://github.com/early-effect/heddle) 0.4.0+.
 
-Docs: [earlyeffect.rocks/hexis](https://www.earlyeffect.rocks/hexis/) (after the first Pages deploy).
-
-## Install
-
-```scala
-libraryDependencies += "rocks.earlyeffect" %% "hexis" % "0.0.0"
-// Scala.js / Native
-libraryDependencies += "rocks.earlyeffect" %%% "hexis" % "0.0.0"
-```
-
-Set `JEV_API_KEY` (or `TYPESAFE_API_KEY`).
+Install, including the current version: [earlyeffect.rocks/hexis](https://www.earlyeffect.rocks/hexis/install.html).
 
 ## Quick start
 
@@ -51,4 +41,4 @@ Tests use `Transport.test(script)` and never hit the network.
 
 ## License
 
-Apache-2.0
+Copyright [Russell White](https://github.com/russwyte). Licensed under the [Apache License, Version 2.0](LICENSE).
