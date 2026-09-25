@@ -25,7 +25,7 @@ $coordinate
 ```
 
 Set `JEV_API_KEY` (or `TYPESAFE_API_KEY`) for `Transport.live`.
-""",
+"""
   )
 
   override def spec = suite("Install")(
