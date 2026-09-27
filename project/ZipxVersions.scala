@@ -14,7 +14,7 @@ object MyVersions extends ZipxVersions:
   val zioTestSbt = zio.mod("zio-test-sbt").test
   val zioJson    = Lib("dev.zio", "zio-json", "1.1.0")
 
-  val heddle = Lib("rocks.earlyeffect", "heddle", "0.4.0")
+  val heddle = Lib("rocks.earlyeffect", "heddle", "0.4.1")
 
   val scalaJavaTime     = Lib("io.github.cquiroz", "scala-java-time", "2.7.0")
   val scalaJavaTimeTzdb = scalaJavaTime.mod("scala-java-time-tzdb")
@@ -30,7 +30,7 @@ object MyVersions extends ZipxVersions:
   val scalajs        = Plugin("org.scala-js", "sbt-scalajs", "1.22.0")
   val scalaNative    = Plugin("org.scala-native", "sbt-scala-native", "0.5.12")
   val specularPlugin = Plugin("rocks.earlyeffect", "sbt-specular", "0.17.0")
-  val sbtReload      = Plugin("com.jamesward", "sbt-reload", "0.0.7")
+  val sbtReload      = Plugin("com.jamesward", "sbt-reload", "0.0.8")
 
   def coreLib   = library(zio, zioStreams, zioJson, heddle)
   def coreTest  = library(zioTest, zioTestSbt)
