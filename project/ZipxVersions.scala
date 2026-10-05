@@ -24,7 +24,7 @@ object MyVersions extends ZipxVersions:
   val specular        = Lib("rocks.earlyeffect", "specular-core", "0.17.0")
   val specularZioTest = specular.mod("specular-zio-test").test
   val specularTheme   = specular.mod("early-effect-docs-theme").test
-  val ascentJs        = Lib("rocks.earlyeffect", "ascent-js", "0.7.1")
+  val ascentJs        = Lib("rocks.earlyeffect", "ascent-js", "0.7.4")
   val ascentCss       = ascentJs.mod("ascent-css")
 
   val scalafmt       = Plugin("org.scalameta", "sbt-scalafmt", "2.6.2")

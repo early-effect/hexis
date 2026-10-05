@@ -79,6 +79,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: save
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: cache-rehydrate
         run: sbt 'Test/compile'
@@ -105,9 +106,8 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: save
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
-      - name: Pinned snapshots
-        run: echo "::warning title=zipx snapshots::pinned snapshots (rocks.earlyeffect:sbt-zipx:0.17.0-SNAPSHOT)"
       - name: test
         run: |
           if [ "$ZIPX_VERIFY_CLEAN_FULL" = "true" ]; then
@@ -140,6 +140,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: fmt
         run: |
@@ -173,6 +174,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: workflow-check
         run: |
@@ -206,6 +208,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: advisories
         run: |
@@ -243,6 +246,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: Fetch PR base SHA
         run: git fetch --no-tags origin "$ZIPX_MODVER_BASE_SHA"
@@ -281,6 +285,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: Fetch PR base SHA
         run: git fetch --no-tags origin "$ZIPX_MODVER_BASE_SHA"
@@ -316,6 +321,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: test-js
         run: |
@@ -349,6 +355,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: Install Scala Native build dependencies
         run: sudo apt-get update && sudo apt-get install -y clang libstdc++-12-dev libgc-dev libunwind-dev libssl-dev
@@ -361,13 +368,30 @@ jobs:
           fi
         env:
           ZIPX_VERIFY_CLEAN_FULL: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'clean') }}
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    needs:
+      - advisories
+      - fmt
+      - modver-check
+      - modver-suggest
+      - test
+      - test-js
+      - test-native
+      - workflow-check
+    if: "!cancelled()"
+    steps:
+      - name: Fail when a Verify job failed or was cancelled
+        if: (needs.advisories.result == 'failure' || needs.advisories.result == 'cancelled') || (needs.fmt.result == 'failure' || needs.fmt.result == 'cancelled') || (needs.modver-check.result == 'failure' || needs.modver-check.result == 'cancelled') || (needs.modver-suggest.result == 'failure' || needs.modver-suggest.result == 'cancelled') || (needs.test.result == 'failure' || needs.test.result == 'cancelled') || (needs.test-js.result == 'failure' || needs.test-js.result == 'cancelled') || (needs.test-native.result == 'failure' || needs.test-native.result == 'cancelled') || (needs.workflow-check.result == 'failure' || needs.workflow-check.result == 'cancelled')
+        run: exit 1
   snapshots:
     name: snapshots
     runs-on: ubuntu-latest
     needs:
       - cache-rehydrate
-      - test
-    if: ((!cancelled() && needs.cache-rehydrate.result != 'failure' && needs.test.result != 'failure') && ((((github.event_name == 'push') && ((github.ref == 'refs/heads/main'))) || (github.event_name == 'workflow_dispatch')))) && (github.repository == 'early-effect/hexis')
+      - verify
+    if: ((!cancelled() && needs.cache-rehydrate.result != 'failure' && needs.verify.result != 'failure') && ((((github.event_name == 'push') && ((github.ref == 'refs/heads/main'))) || (github.event_name == 'workflow_dispatch')))) && (github.repository == 'early-effect/hexis')
     env:
       COURSIER_TTL: "0s"
       JAVA_OPTS: -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
@@ -387,6 +411,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: snapshots
         run: sbt 'zipxSnapshotPublish'
@@ -395,8 +420,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - cache-rehydrate
-      - test
-    if: (!cancelled() && needs.cache-rehydrate.result != 'failure' && needs.test.result != 'failure') && (((github.event_name == 'pull_request') && (contains(github.event.pull_request.labels.*.name, 'snapshots'))) && (github.event.pull_request.head.repo.full_name == github.repository))
+      - verify
+    if: (!cancelled() && needs.cache-rehydrate.result != 'failure' && needs.verify.result != 'failure') && (((github.event_name == 'pull_request') && (contains(github.event.pull_request.labels.*.name, 'snapshots'))) && (github.event.pull_request.head.repo.full_name == github.repository))
     env:
       COURSIER_TTL: "0s"
       JAVA_OPTS: -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
@@ -416,6 +441,7 @@ jobs:
           node-version: ""
           sbt-disk-cache: "false"
           cache-mode: restore
+          purge: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'purge') }}
           cache-epoch: fe7dc0ac41a3d683
       - name: snapshots-pr
         run: sbt 'zipxSnapshotPublish pr'
