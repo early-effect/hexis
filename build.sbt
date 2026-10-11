@@ -131,8 +131,14 @@ lazy val docs = project
     specularBuildMain      := "hexis.docs.BuildSite",
     specularMetaProject    := Some(LocalProject("hexis")),
     specularArtifactKind   := "library",
-    specularSiteDirectory  := (ThisBuild / baseDirectory).value / "target" / "site",
-    specularDisplayVersion := stripCi,
+    specularSiteDirectory := (ThisBuild / baseDirectory).value / "target" / "site",
+    // Do not strip -ci first. sbt-dynver-ci names a distance build 0.1.1-ci, and stripping
+    // that suffix yields 0.1.1, which is not the published coordinate. A raw version that
+    // contains -ci, +, or SNAPSHOT advertises the last Central tag.
+    specularDisplayVersion := { raw =>
+      val distance = raw.contains("-ci") || raw.contains("+") || raw.contains("SNAPSHOT")
+      if raw.nonEmpty && !distance then raw else "0.1.0"
+    },
   )
 
 addCommandAlias("docsPreview", "~docs/specularPreview")

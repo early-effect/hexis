@@ -1,13 +1,8 @@
 # Hexis
 
-ZIO / Scala 3 SDK for [TypeSafe System One](https://docs.typesafe.ai/introduction) (Jev).
+State and questions go in. Structured answers come out.
 
-Send a state and typed questions. Get structured answers, probabilities, and confidence.
-Compose those answers in your code.
-
-Cross-built for JVM, Scala.js, and Scala Native. HTTP is [heddle](https://github.com/early-effect/heddle) 0.4.0+.
-
-Install, including the current version: [earlyeffect.rocks/hexis](https://www.earlyeffect.rocks/hexis/install.html).
+Docs: [earlyeffect.rocks/hexis](https://www.earlyeffect.rocks/hexis/)
 
 ## Quick start
 
