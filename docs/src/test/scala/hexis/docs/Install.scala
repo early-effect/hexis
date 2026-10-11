@@ -1,15 +1,13 @@
 package hexis.docs
 
 import specular.*
-import specular.site.ProjectMeta
 import specular.ziotest.DocSpecSuite
 import zio.test.*
 
 object Install extends DocSpecSuite:
 
-  /** Site builds pass `-Dspecular.meta.*`. Doc tests load this page without them. */
-  def docsVersion: String =
-    ProjectMeta.fromSystemProperties.map(_.docsVersion).getOrElse("0.0.0")
+  /** Site builds pass `-Dspecular.meta.version`. Doc tests load this page without it. */
+  def docsVersion: String = DocsVersion.version
 
   def coordinate: String =
     s"""libraryDependencies += "rocks.earlyeffect" %% "hexis" % "$docsVersion"

@@ -4,36 +4,48 @@ import earlyeffect.docs.EarlyEffectTheme
 import specular.site.*
 import zio.*
 
-import java.nio.file.Path
+import java.nio.file.{Files, Path, StandardCopyOption}
 
 object BuildSite extends DocsSite:
 
-  def pages =
+  /** The guide. The front page is not in this list, so it is not a second sidebar item. */
+  private val guide: Vector[specular.DocPage] =
     Vector(Overview.doc, Install.doc, Quickstart.doc, Transport.doc, Patterns.doc, Errors.doc, Cookbooks.doc)
 
-  override def site: SiteModel =
-    val m       = meta
-    val branded = EarlyEffectTheme.brand(super.site)
+  /** Not a nav item. The sidebar is the guide; this page is the front. */
+  private val frontPage: specular.DocPage = Front.doc
+
+  def pages: Vector[specular.DocPage] = frontPage +: guide
+
+  override def site(settings: DocsSettings): SiteModel =
+    val branded = EarlyEffectTheme.brand(super.site(settings))
     branded.copy(
-      summaryMarkdown = Some(
-        """**Hexis** is a ZIO SDK for TypeSafe System One. Typed questions, structured
-answers, probabilities you can branch on. HTTP is heddle on JVM, JS, and Native.
-"""
-      ),
+      nav = Some(NavModel.flat(guide)),
+      pages = pages,
+      summaryMarkdown = None,
+      installSnippets = Vector(CodeSnippet("Install", Install.coordinate)),
       brand = Some(
         Brand(
-          name = m.title.getOrElse("hexis"),
+          name = settings.meta.displayTitle,
           links = Vector(EarlyEffectTheme.github("https://github.com/early-effect/hexis")),
         )
       ),
-      installSnippets = Vector(CodeSnippet("Install", Install.coordinate)),
     )
   end site
 
   override def layers: ZLayer[Any, Nothing, SiteBuilder] =
     EarlyEffectTheme.layers
 
-  override def afterBuild(out: Path, result: SiteOutput): Task[Unit] =
+  override def afterBuild(out: Path, result: SiteOutput): IO[SiteError, Unit] =
     val _ = result
-    EarlyEffectTheme.writeLogo(out)
+    // Specular always writes index.html as a summary plus a second copy of the nav.
+    // The front DocPage is the index. Copy it over that file. Asset paths stay site-relative.
+    val front   = out.resolve(s"${frontPage.slug}.html")
+    val index   = out.resolve("index.html")
+    val promote =
+      ZIO.attemptBlockingIO(Files.copy(front, index, StandardCopyOption.REPLACE_EXISTING)).mapError { err =>
+        SiteError.WriteFailed(index, err)
+      }
+    promote *> EarlyEffectTheme.writeLogo(out)
+  end afterBuild
 end BuildSite

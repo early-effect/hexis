@@ -21,21 +21,50 @@ object MyVersions extends ZipxVersions:
   val scalaJavaTime     = Lib("io.github.cquiroz", "scala-java-time", "2.7.0")
   val scalaJavaTimeTzdb = scalaJavaTime.mod("scala-java-time-tzdb")
 
-  val specular        = Lib("rocks.earlyeffect", "specular-core", "0.17.0")
+  val specular        = Lib("rocks.earlyeffect", "specular-core", "0.20.0")
   val specularZioTest = specular.mod("specular-zio-test").test
-  val specularTheme   = specular.mod("early-effect-docs-theme").test
-  val ascentJs        = Lib("rocks.earlyeffect", "ascent-js", "0.7.4")
-  val ascentCss       = ascentJs.mod("ascent-css")
+
+  /** Specular 0.20 depends on heddle 0.9. The published client stays on 0.4, so docs do not take that edge. */
+  val specularSite = specular
+    .mod("specular-site")
+    .excluding(
+      ZipxExclude.org("rocks.earlyeffect", "heddle_3"),
+      ZipxExclude.org("rocks.earlyeffect", "ascent-preview_3"),
+    )
+    .test
+  val specularTheme = specular
+    .mod("early-effect-docs-theme")
+    .excluding(
+      ZipxExclude.org("rocks.earlyeffect", "heddle_3"),
+      ZipxExclude.org("rocks.earlyeffect", "ascent-preview_3"),
+    )
+    .test
+
+  /** Docs figures only. The published hexis artifact does not select this. */
+  val mermoidAscent = Lib("rocks.earlyeffect", "mermoid-ascent", "0.2.0")
+
+  /** What mermoid-ascent 0.2.0 and specular 0.20 resolve. No docs client, so ascent-js stays off this classpath. */
+  val ascentCore = Lib("rocks.earlyeffect", "ascent-core", "0.10.1")
+  val ascentCss  = ascentCore.mod("ascent-css")
+  val ascentHtml = Lib("rocks.earlyeffect", "ascent-html", "0.10.0")
 
   val scalafmt       = Plugin("org.scalameta", "sbt-scalafmt", "2.6.2")
   val scalajs        = Plugin("org.scala-js", "sbt-scalajs", "1.22.0")
   val scalaNative    = Plugin("org.scala-native", "sbt-scala-native", "0.5.12")
-  val specularPlugin = Plugin("rocks.earlyeffect", "sbt-specular", "0.17.0")
+  val specularPlugin = Plugin("rocks.earlyeffect", "sbt-specular", "0.20.0")
   val sbtReload      = Plugin("com.jamesward", "sbt-reload", "0.0.7")
 
   def coreLib   = library(zio, zioStreams, zioJson, heddle)
   def coreTest  = library(zioTest, zioTestSbt)
-  def docsTest  = library(specularZioTest, specularTheme, ascentCss)
+  def docsTest  = library(
+    specularZioTest,
+    specularSite,
+    specularTheme,
+    mermoidAscent.test,
+    ascentCore,
+    ascentCss,
+    ascentHtml,
+  )
   def javaTime  = library(scalaJavaTime, scalaJavaTimeTzdb)
   def jsRuntime = javaTime
 
