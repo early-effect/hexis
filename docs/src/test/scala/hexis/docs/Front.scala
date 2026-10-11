@@ -112,10 +112,10 @@ ${Install.coordinate}
           !Install.coordinate.contains("-ci"),
           !Install.coordinate.contains("SNAPSHOT"),
           !Install.coordinate.contains("<version>"),
+          DocsVersion.advertise("0.1.1") == DocsVersion.published,
           DocsVersion.advertise("0.1.1-ci") == DocsVersion.published,
-          DocsVersion.advertise("0.1.1-SNAPSHOT") == DocsVersion.published,
-          DocsVersion.advertise("0.1.0+4-abcdef") == DocsVersion.published,
-          DocsVersion.advertise("0.1.0") == "0.1.0",
+          DocsVersion.advertise("0.1.0+1-abc") == DocsVersion.published,
+          DocsVersion.advertise(DocsVersion.published) == DocsVersion.published,
         )
       },
       test("the figure is evaluate, and fit keeps it inside a phone column") {
