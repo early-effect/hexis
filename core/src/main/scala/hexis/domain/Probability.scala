@@ -11,6 +11,7 @@ object Probability:
 
   def zero: Probability = 0.0
   def one: Probability  = 1.0
+end Probability
 
 opaque type Confidence <: Double = Double
 
@@ -23,3 +24,4 @@ object Confidence:
 
   def zero: Confidence = 0.0
   def one: Confidence  = 1.0
+end Confidence

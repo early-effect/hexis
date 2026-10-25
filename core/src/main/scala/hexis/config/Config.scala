@@ -63,7 +63,6 @@ object Config:
       base  = firstNonEmpty(env(BaseUrlEnv)).getOrElse(DefaultBaseUrl)
       model = firstNonEmpty(env(DefaultModelEnv)).map(Model.parse).getOrElse(Model.Latest)
     yield Config(apiKey = key, baseUrl = base.stripSuffix("/"), model = model)
-  end fromEnv
 
   val descriptor: ZConfig[Config] =
     (ZConfig.string("apiKey") ++

@@ -19,4 +19,3 @@ The live HTTP client is heddle on JVM, Scala.js, and Native.
       Probability.unsafely(0.95)
     }.assert(p => assertTrue(p.toDouble == 0.95)),
   )
-end Overview

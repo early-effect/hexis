@@ -10,7 +10,6 @@ enum Answer[A]:
       confidence: Confidence,
       levels: Seq[A],
   )
-end Answer
 
 object Answer:
   extension [A](s: Answer.Score[A])
@@ -21,4 +20,5 @@ object Answer:
     def normalized: Double =
       val top = (s.levels.length - 1).max(1)
       s.score / top.toDouble
+  end extension
 end Answer

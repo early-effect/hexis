@@ -110,7 +110,6 @@ object Ask:
             val tuple = answers.foldRight[Tuple](EmptyTuple)(_ *: _)
             NamedTuple[N, AnswersOf[V]](tuple.asInstanceOf[AnswersOf[V]])
           }
-      end decode
 
   private inline def namesOf[N <: Tuple]: List[String] =
     inline erasedValue[N] match

@@ -31,4 +31,3 @@ object LiveSpec extends ZIOSpecDefault:
         )
       }
     ) @@ TestAspect.ifEnvSet("JEV_API_KEY") @@ TestAspect.tag("hexis.live") @@ TestAspect.withLiveClock
-end LiveSpec

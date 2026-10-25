@@ -34,4 +34,3 @@ object CodecSpec extends ZIOSpecDefault:
       assertTrue(e.asJson.asObject.isDefined)
     },
   )
-end CodecSpec

@@ -22,4 +22,3 @@ not depend on a chat-model SDK.
       Hierarchy.fixture.children.keySet
     }.assert(keys => assertTrue(keys == Set("drinkware", "sporting"))),
   )
-end Cookbooks

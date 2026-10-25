@@ -49,7 +49,6 @@ object HeddleTransport:
       maxHeaderBytes = BytesLength(h.maxHeaderBytes),
       maxBodyBytes = BytesLength(h.maxBodyBytes),
     )
-  end toClientConfig
 end HeddleTransport
 
 private def toHeddle(req: HttpRequest): IO[TransportError, Request] =
