@@ -10,6 +10,7 @@ enum HttpMethod:
     this match
       case Get  => "GET"
       case Post => "POST"
+end HttpMethod
 
 final case class HttpRequest(
     method: HttpMethod,
@@ -58,6 +59,7 @@ object TestTransport:
 
     def apply(first: HttpResponse | TransportError, rest: (HttpResponse | TransportError)*): Script =
       Script(Chunk(first) ++ Chunk.fromIterable(rest))
+  end Script
 
   final class Live(remaining: Ref[Chunk[HttpResponse | TransportError]], seen: Ref[Chunk[HttpRequest]])
       extends Transport:

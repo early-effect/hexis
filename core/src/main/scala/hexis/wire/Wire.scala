@@ -106,6 +106,7 @@ object WireUsage:
   given JsonDecoder[WireUsage] = DeriveJsonDecoder.gen
 
   def toDomain(u: WireUsage): Usage = Usage(u.input_tokens, u.output_tokens)
+end WireUsage
 
 final case class WireModelsResponse(models: List[WireModelCard])
 
@@ -118,6 +119,7 @@ object WireModelCard:
   given JsonDecoder[WireModelCard] = DeriveJsonDecoder.gen
 
   def toDomain(c: WireModelCard): ModelCard = ModelCard(c.name, c.description, c.release_date)
+end WireModelCard
 
 object Decode:
   def noul(raw: WireAnswer, path: String): Either[JevError, Answer[Boolean]] =

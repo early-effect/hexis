@@ -22,4 +22,3 @@ object ConfigSpec extends ZIOSpecDefault:
       assertTrue(cfg.exists(_.apiKey.reveal == "explicit"))
     },
   )
-end ConfigSpec

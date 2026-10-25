@@ -75,9 +75,7 @@ object Hierarchy:
               (finished ++ expanded.flatten).sortBy(c => -c.score).take(width)
             }
             .flatMap(step(_, depth + 1))
-        end if
     step(Chunk(PathCandidate(Chunk.empty, 0.0, 0)), 0)
-  end beam
 
   private def choose(state: String, labels: Seq[String]): ZIO[SystemOne, JevError, Map[String, Probability]] =
     if labels.size == 1 then ZIO.succeed(Map(labels.head -> Probability.one))

@@ -44,4 +44,3 @@ object HeddleAdapterSpec extends ZIOSpecDefault:
         }
       }
     ) @@ TestAspect.withLiveClock
-end HeddleAdapterSpec

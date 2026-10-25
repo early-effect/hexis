@@ -43,6 +43,7 @@ object Question:
     value match
       case e: Entry  => e
       case s: String => Entry.Text(s)
+end Question
 
 trait ChoiceDomain[A]:
   def values: List[A]
@@ -75,6 +76,7 @@ object Noul:
       Question.asEntry(instructions),
       Some(NoulCriteria(Question.asEntry(yes), Question.asEntry(no))),
     )
+end Noul
 
 object Choice:
   def apply[A](instructions: Entry | String, pairs: (A, Entry | String)*)(using

@@ -52,13 +52,11 @@ object Sde:
             "supported by the source",
           )
         )
-      end if
     }.toMap
     val state = Json.Obj("source_text" -> Json.Str(source), "schema" -> schema, "extraction" -> extraction)
     SystemOne.evaluate(State.Json(state), questions).map {
       _.collect { case (k, Answer.Noul(p)) => k -> p }
     }
-  end verify
 
   def escalate(flags: Map[String, Probability], threshold: Probability = Fire): Boolean =
     flags.exists((_, p) => p.toDouble > threshold.toDouble)

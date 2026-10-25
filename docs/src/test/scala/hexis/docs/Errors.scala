@@ -24,4 +24,3 @@ err match
       JevError.EmptyQuestions.message
     }.assert(msg => assertTrue(msg == "questions must not be empty")),
   )
-end Errors

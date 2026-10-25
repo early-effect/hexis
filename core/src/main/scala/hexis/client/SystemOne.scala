@@ -45,7 +45,6 @@ object SystemOne:
           parsed <- decodeSuccess[WireEvaluateResponse](res)
           out    <- ZIO.fromEither(ask.decode(questions, parsed.answers))
         yield out
-    end evaluate
 
     def models: IO[JevError, Chunk[ModelCard]] =
       request(HttpMethod.Get, "/v1/models", None).flatMap(decodeSuccess[WireModelsResponse]).map { r =>
@@ -82,7 +81,6 @@ object SystemOne:
             }
         }
       loop(0, Duration.Zero)
-    end retrying
 
     private def nextDelay(err: JevError, n: Int): zio.UIO[Duration] =
       val r          = config.retry
@@ -106,8 +104,6 @@ object SystemOne:
             zio.Random
               .nextDoubleBetween(1.0 - r.backoffJitter, 1.0)
               .map(f => Duration.fromNanos((cappedNanos.toDouble * f).toLong))
-      end match
-    end nextDelay
 
     private def retryable(err: JevError): Boolean =
       val r = config.retry
@@ -143,8 +139,6 @@ object SystemOne:
           ZIO.fail(JevError.Server(id, status, detailMessage(res.body)))
         case status =>
           ZIO.fail(JevError.Server(id, status, detailMessage(res.body)))
-      end match
-    end mapStatus
 
     private def decodeSuccess[A: JsonDecoder](res: HttpResponse): IO[JevError, A] =
       ZIO.fromEither(res.body.fromJson[A]).mapError(err => JevError.Decode("body", err))

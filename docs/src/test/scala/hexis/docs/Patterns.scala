@@ -21,4 +21,3 @@ Cookbooks (hierarchical beam search, SDE cascade) live in the unpublished
       NoulBand.band(Probability.unsafely(0.95), no = Probability.unsafely(0.2), yes = Probability.unsafely(0.8))
     }.assert(g => assertTrue(g == Gate.Act(true))),
   )
-end Patterns

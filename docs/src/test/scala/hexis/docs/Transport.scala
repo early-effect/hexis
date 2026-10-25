@@ -26,4 +26,3 @@ SystemOne.evaluate(state, questions)
       JevError.TimedOut.message
     }.assert(msg => assertTrue(msg == "request timed out")),
   )
-end Transport

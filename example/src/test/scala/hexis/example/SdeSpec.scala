@@ -27,4 +27,3 @@ object SdeSpec extends ZIOSpecDefault:
         .provide(Transport.test(script), ZLayer.succeed(cfg), SystemOne.layer)
     }
   )
-end SdeSpec

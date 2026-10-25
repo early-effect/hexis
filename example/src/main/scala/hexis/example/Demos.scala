@@ -16,7 +16,6 @@ object Demos:
     SystemOne.evaluate(ticket, questions).map { a =>
       (a.topic.choice, a.refund.noul, a.urgency.normalized)
     }
-  end fanOut
 
   def composite(ticket: String): ZIO[SystemOne, JevError, Double] =
     val questions = Map(
@@ -30,7 +29,6 @@ object Demos:
       val prio  = a.collect { case ("priority", s: Answer.Score[?]) => s.normalized }.headOption.getOrElse(0.0)
       Composite.weighted(spam -> 0.5, abuse -> 0.3, prio -> 0.2)
     }
-  end composite
 
   def route(ticket: String): ZIO[SystemOne, JevError, Gate[String]] =
     val q = Choice.dynamic(
@@ -58,5 +56,4 @@ object Demos:
         case Gate.Act(true) | Gate.Confirm(true) => Some(a.tool.choice)
         case _                                   => None
     }
-  end functionCall
 end Demos

@@ -22,4 +22,3 @@ object PatternSpec extends ZIOSpecDefault:
       assertTrue(math.abs(Composite.weighted(0.5 -> 2.0, 1.0 -> 1.0) - (2.0 / 3.0)) < 1e-9)
     },
   )
-end PatternSpec
