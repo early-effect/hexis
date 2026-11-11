@@ -10,18 +10,18 @@ object MyVersions extends ZipxVersions:
 
   val release = ShipGroup("hexis", "0.1.1")("hexis")
 
-  val zio        = Lib("dev.zio", "zio", "2.1.26")
+  val zio        = Lib("dev.zio", "zio", "2.1.27")
   val zioStreams = zio.mod("zio-streams")
   val zioTest    = zio.mod("zio-test").test
   val zioTestSbt = zio.mod("zio-test-sbt").test
   val zioJson    = Lib("dev.zio", "zio-json", "1.1.0")
 
-  val heddle = Lib("rocks.earlyeffect", "heddle", "0.4.0")
+  val heddle = Lib("rocks.earlyeffect", "heddle", "0.12.0")
 
-  val scalaJavaTime     = Lib("io.github.cquiroz", "scala-java-time", "2.7.0")
+  val scalaJavaTime     = Lib("io.github.cquiroz", "scala-java-time", "2.8.0")
   val scalaJavaTimeTzdb = scalaJavaTime.mod("scala-java-time-tzdb")
 
-  val specular        = Lib("rocks.earlyeffect", "specular-core", "0.20.0")
+  val specular        = Lib("rocks.earlyeffect", "specular-core", "0.21.1")
   val specularZioTest = specular.mod("specular-zio-test").test
 
   /** Specular 0.20 depends on heddle 0.9. The published client stays on 0.4, so docs do not take that edge. */
@@ -44,15 +44,15 @@ object MyVersions extends ZipxVersions:
   val mermoidAscent = Lib("rocks.earlyeffect", "mermoid-ascent", "0.2.0")
 
   /** What mermoid-ascent 0.2.0 and specular 0.20 resolve. No docs client, so ascent-js stays off this classpath. */
-  val ascentCore = Lib("rocks.earlyeffect", "ascent-core", "0.10.1")
+  val ascentCore = Lib("rocks.earlyeffect", "ascent-core", "0.10.2")
   val ascentCss  = ascentCore.mod("ascent-css")
-  val ascentHtml = Lib("rocks.earlyeffect", "ascent-html", "0.10.0")
+  val ascentHtml = Lib("rocks.earlyeffect", "ascent-html", "0.10.1")
 
   val scalafmt       = Plugin("org.scalameta", "sbt-scalafmt", "2.6.2")
   val scalajs        = Plugin("org.scala-js", "sbt-scalajs", "1.22.0")
   val scalaNative    = Plugin("org.scala-native", "sbt-scala-native", "0.5.12")
-  val specularPlugin = Plugin("rocks.earlyeffect", "sbt-specular", "0.20.0")
-  val sbtReload      = Plugin("com.jamesward", "sbt-reload", "0.0.7")
+  val specularPlugin = Plugin("rocks.earlyeffect", "sbt-specular", "0.21.1")
+  val sbtReload      = Plugin("com.jamesward", "sbt-reload", "0.0.8")
 
   def coreLib   = library(zio, zioStreams, zioJson, heddle)
   def coreTest  = library(zioTest, zioTestSbt)
